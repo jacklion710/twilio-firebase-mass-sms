@@ -22,7 +22,13 @@ import {
   theme as baseTheme,
   extendTheme,
 } from '@chakra-ui/react';
-import { fetchOptedInUsers } from '@/components/FetchOptedInUsers';
+import { db } from '@/utils/firebase'; 
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+} from 'firebase/firestore';
 
 const theme = extendTheme({
   fonts: {
@@ -43,17 +49,37 @@ function Home() {
   const [users, setUsers] = useState<User[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  function formatPhoneNumber(phoneNumber: string) {
+    // Remove hyphens, parentheses, and spaces
+    const cleanNumber = phoneNumber.replace(/[-()\s]/g, '');
+    // Prepend with +1
+    return `+1${cleanNumber}`;
+  }  
+
   useEffect(() => {
-    const getUsers = async () => {
+    const fetchUsers = async () => {
       try {
-        const optedInUsers = await fetchOptedInUsers();
-        setUsers(optedInUsers);
+        const usersCollectionRef = collection(db, 'users');
+        const q = query(usersCollectionRef, where('isOptedInTexts', '==', true));
+        const querySnapshot = await getDocs(q);
+        const usersData = querySnapshot.docs.map(doc => {
+          const user = doc.data();
+          return {
+            id: doc.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            // Format the phone number before saving the user data
+            phoneNumber: formatPhoneNumber(user.phoneNumber),
+          };
+        });
+  
+        setUsers(usersData);
       } catch (error) {
-        console.error(error);
+        console.error("Failed to fetch users", error);
       }
     };
-
-    getUsers();
+  
+    fetchUsers();
   }, []);
 
   const sendMessage = async () => {
