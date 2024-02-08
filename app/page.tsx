@@ -22,6 +22,7 @@ import {
   theme as baseTheme,
   extendTheme,
 } from '@chakra-ui/react';
+import { fetchOptedInUsers } from '@/components/FetchOptedInUsers';
 
 const theme = extendTheme({
   fonts: {
@@ -31,6 +32,7 @@ const theme = extendTheme({
 }, baseTheme);
 
 interface User {
+  id: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -42,12 +44,16 @@ function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    // Fetch users who have opted in for text messaging
-    const fetchUsers = async () => {
-      // Fetch logic remains the same
+    const getUsers = async () => {
+      try {
+        const optedInUsers = await fetchOptedInUsers();
+        setUsers(optedInUsers);
+      } catch (error) {
+        console.error(error);
+      }
     };
-    
-    fetchUsers();
+
+    getUsers();
   }, []);
 
   const sendMessage = async () => {
