@@ -20,13 +20,10 @@ import {
   doc 
 } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import dotenv from 'dotenv';
 import { 
   initializeAppCheck, 
   ReCaptchaV3Provider 
 } from 'firebase/app-check';
-
-dotenv.config();
 
 const config = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
