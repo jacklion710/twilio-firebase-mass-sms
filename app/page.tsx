@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import {
   ChakraProvider,
   Box,
+  Container,
+  Center,
   Textarea,
   Button,
   VStack,
@@ -60,48 +62,51 @@ function Home() {
 
   return (
     <ChakraProvider>
-      <Box p={5}>
+      <Center minH="100vh" bg="gray.100">
+        <Container>
+          <Box p={5} bg="white" shadow="md" borderRadius="lg">
+            {/* LIST OF USERS WHO ARE OPTED INTO YOUR SMS LIST */}
+            <Box mt={4} overflowY="scroll" maxH="300px" p={4} border="1px" borderColor="gray.200" borderRadius="md">
+              <VStack align="stretch">
+                {users.map((user, index) => (
+                  <Text key={index}>{`${user.firstName} ${user.lastName} (${user.phoneNumber})`}</Text>
+                ))}
+              </VStack>
+            </Box>
 
-        {/* LIST OF USERS WHO ARE OPTED INTO YOUR SMS LIST */}
-        <Box mt={4} overflowY="scroll" maxH="300px" p={4} border="1px" borderColor="gray.200">
-          <VStack align="stretch">
-            {users.map((user, index) => (
-              <Text key={index}>{`${user.firstName} ${user.lastName} (${user.phoneNumber})`}</Text>
-            ))}
-          </VStack>
-        </Box>
+            {/* MESSAGE TO SEND TO YOUR USERS */}
+            <Textarea
+              placeholder="Enter your message here..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              mt={4}
+            />
 
-        {/* MESSAGE TO SEND TO YOUR USERS */}
-        <Textarea
-          placeholder="Enter your message here..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
+            {/* SUBMIT MESSAGE */}
+            <Button mt={4} colorScheme="blue" onClick={handleSendClick}>
+              Send Message
+            </Button>
 
-        {/* SUBMIT MESSAGE */}
-        <Button mt={4} colorScheme="blue" onClick={handleSendClick}>
-          Send Message
-        </Button>
-
-        {/* CONFIRMATION MODAL */}
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Confirm Message</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              Are you sure you want to send this message?
-            </ModalBody>
-            <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={sendMessage}>
-                Yes, Send It
-              </Button>
-              <Button variant="ghost" onClick={onClose}>Cancel</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-        
-      </Box>
+            {/* CONFIRMATION MODAL */}
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Confirm Message</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  Are you sure you want to send this message?
+                </ModalBody>
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={sendMessage}>
+                    Yes, Send It
+                  </Button>
+                  <Button variant="ghost" onClick={onClose}>Cancel</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </Box>
+        </Container>
+      </Center>
     </ChakraProvider>
   );
 }
