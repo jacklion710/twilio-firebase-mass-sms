@@ -51,13 +51,18 @@ function Home() {
   }, []);
 
   const sendMessage = async () => {
-    // Send message to users
+    // Assuming `users` contains all necessary data
+    const payload = {
+      template: message, // The message template with placeholders
+      users: users, // Array of users
+    };
+  
     await fetch('/api/twilio', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify(payload),
     });
     alert('Message sent!');
     onClose(); // Close modal after sending
