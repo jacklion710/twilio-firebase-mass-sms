@@ -17,8 +17,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { template, users } = req.body;
 
     try {
-      for (const user of users) {
+      for (let i = 0; i < users.length; i++) {
+        const user = users[i];
         const personalizedMessage = prepareMessage(template, user);
+
+        // Log the progress of message being sent
+        console.log(`Sending message to ${user.firstName} ${user.lastName} (${user.phoneNumber}) [${i + 1}/${users.length}]`);
 
         await client.messages.create({
           body: personalizedMessage,
@@ -26,9 +30,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           from: process.env.TWILIO_PHONE_NUMBER,
         });
 
+        // Log after successfully sending the message
+        console.log(`Message sent to ${user.firstName} ${user.lastName} successfully.`);
+
         // Wait for a specified delay before sending the next message
-        // Adjust the delay as necessary to comply with Twilio's rate limits and your usage patterns
-        await delay(5000); // Delay of 1 second (1000 milliseconds)
+        await delay(5000); // Adjust the delay as necessary
       }
 
       res.status(200).json({ success: true, message: 'Messages sent successfully!' });
