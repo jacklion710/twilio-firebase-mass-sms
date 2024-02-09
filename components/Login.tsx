@@ -4,7 +4,6 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Checkbox,
     Stack,
     Link as ChakraLink,
     Button,
@@ -13,8 +12,6 @@ import {
     ChakraProvider,
     InputGroup,
     InputRightElement,
-    Divider,
-    Center
   } from '@chakra-ui/react';
   import { 
     ViewIcon, 
@@ -39,11 +36,7 @@ import {
     where 
   } from '@/utils/firebase';
   import dynamic from "next/dynamic";
-  import NextLink from 'next/link';
-  import Head from 'next/head';
   import { COLORS } from '@/utils/palette';
-  import { motion } from 'framer-motion';
-  import { useRouter } from 'next/router';
   
   const { 
     text, 
@@ -53,8 +46,6 @@ import {
     buttonCol, 
     primary, 
     accent,
-    accentLight,
-    neonAccent,
     grey 
   } = COLORS;
     
@@ -65,7 +56,6 @@ import {
       const [passwordError, setPasswordError] = useState('');
       const [error, setError] = useState<string | null>(null);
       const [rememberMe, setRememberMe] = useState(false);
-      const router = useRouter();
       
       const flexVariants = {
         visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
@@ -171,15 +161,6 @@ import {
     
         return () => unsubscribe();
       }, []);
-  
-      useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            // User is already logged in, redirect to profile page
-            router.push('/auth/Profile');
-          }
-        });
-      }, [router]);
     
       return (
         <ChakraProvider>
