@@ -180,9 +180,9 @@ function MassSMS() {
                 <Tbody>
                   {users.map((user, index) => (
                     <Tr key={index}>
-                      <Td color={primary} fontWeight="semibold" borderBottom="1px solid" borderColor={grey}>{user.firstName}</Td>
-                      <Td color={primary} fontWeight="semibold" borderBottom="1px solid" borderColor={grey}>{user.lastName}</Td>
-                      <Td color={primary} fontWeight="semibold" borderBottom="1px solid" borderColor={grey}>{user.phoneNumber}</Td>
+                      <Td color={primary} borderBottom="1px solid" borderColor={grey}>{user.firstName}</Td>
+                      <Td color={primary} borderBottom="1px solid" borderColor={grey}>{user.lastName}</Td>
+                      <Td color={primary} borderBottom="1px solid" borderColor={grey}>{user.phoneNumber}</Td>
                     </Tr>
                   ))}
                 </Tbody>
