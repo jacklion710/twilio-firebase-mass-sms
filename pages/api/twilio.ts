@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import twilio from 'twilio';
 
-const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_SECRET_KEY);
+const accountSid = process.env.TWILIO_ACCOUNT_SID; 
+const authToken = process.env.TWILIO_AUTH_TOKEN; 
+const client = twilio(accountSid, authToken);
 
 const prepareMessage = (template: string, user: { firstName: string, lastName: string }): string => {
   return template
