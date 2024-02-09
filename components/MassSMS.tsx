@@ -146,7 +146,7 @@ function MassSMS() {
       <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet"></link>
 
       <Center minH="100vh" bgColor={background}>
-        <Container>
+        <Container centerContent>
 
           <Heading mb={10} textAlign={'center'}>Mass SMS Builder</Heading>
 
