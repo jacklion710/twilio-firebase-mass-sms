@@ -240,9 +240,9 @@ function MassSMS() {
                 borderWidth="3px" 
                 minW="40vw"
               >
-                <ModalHeader>Confirm Message</ModalHeader>
+                <ModalHeader color={secondaryText}>Confirm Message</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
+                <ModalBody color={secondaryText}>
                   Are you sure you want to send this message?
                 </ModalBody>
                 <ModalFooter>
