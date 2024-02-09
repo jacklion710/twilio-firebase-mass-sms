@@ -29,6 +29,8 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/utils/firebase';
 
 const theme = extendTheme({
   fonts: {
@@ -81,6 +83,17 @@ function MassSMS() {
   
     fetchUsers();
   }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      alert('You have been signed out.');
+      // Optionally, redirect the user to the login page or perform other actions after sign out
+    } catch (error) {
+      console.error('Error signing out: ', error);
+      alert('Failed to sign out.');
+    }
+  };
 
   const sendMessage = async () => {
     // Assuming `users` contains all necessary data
@@ -189,6 +202,18 @@ function MassSMS() {
                 minW={"130px"}
               >
                 Send Message
+              </Button>
+            </Flex>
+
+            {/* SIGN OUT BUTTON */}
+            <Flex justifyContent="flex-end" width="full">
+              <Button
+                onClick={handleSignOut}
+                colorScheme="red"
+                size="sm"
+                mt="4"
+              >
+                Sign Out
               </Button>
             </Flex>
 
