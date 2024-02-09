@@ -5,27 +5,26 @@ import {
     FormLabel,
     Input,
     Stack,
-    Link as ChakraLink,
     Button,
     Heading,
     Text,
     ChakraProvider,
     InputGroup,
     InputRightElement,
-  } from '@chakra-ui/react';
-  import { 
+} from '@chakra-ui/react';
+import { 
     ViewIcon, 
     ViewOffIcon 
-  } from '@chakra-ui/icons';
-  import { 
+} from '@chakra-ui/icons';
+import { 
     useState, 
     useEffect 
-  } from 'react';
-  import { 
+} from 'react';
+import { 
     signInWithEmailAndPassword, 
     onAuthStateChanged 
-  } from 'firebase/auth';
-  import { 
+} from 'firebase/auth';
+import { 
     auth, 
     db, 
     getDocs, 
@@ -34,11 +33,11 @@ import {
     collection, 
     query, 
     where 
-  } from '@/utils/firebase';
-  import dynamic from "next/dynamic";
-  import { COLORS } from '@/utils/palette';
-  
-  const { 
+} from '@/utils/firebase';
+import dynamic from "next/dynamic";
+import { COLORS } from '@/utils/palette';
+
+const { 
     text, 
     secondaryText, 
     background, 
@@ -47,7 +46,7 @@ import {
     primary, 
     accent,
     grey 
-  } = COLORS;
+} = COLORS;
     
   function Login() {
       const [email, setEmail] = useState('');
