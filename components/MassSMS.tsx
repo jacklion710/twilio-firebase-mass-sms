@@ -21,6 +21,12 @@ import {
   ModalCloseButton,
   theme as baseTheme,
   extendTheme,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
 } from '@chakra-ui/react';
 import { db } from '@/utils/firebase'; 
 import {
@@ -162,12 +168,25 @@ function MassSMS() {
             <Text color={secondaryText}>List of users who are opted in for texts:</Text>
 
             {/* LIST OF USERS WHO ARE OPTED INTO YOUR SMS LIST */}
-            <Box borderColor={primary} bgColor="white" mb={8} mt={4} overflowY="scroll" maxH="400px" p={4} border="1px" borderRadius="md" minH="200px"> 
-              <VStack align="stretch">
-                {users.map((user, index) => (
-                  <Text color={primary} key={index}>{`${user.firstName} ${user.lastName} (${user.phoneNumber})`}</Text>
-                ))}
-              </VStack>
+            <Box borderColor={primary} bgColor="white" mb={8} mt={4} overflowY="auto" maxH="400px" p={4} border="2px" borderRadius="md">
+              <Table variant="simple" size="md" colorScheme="telegram">
+                <Thead>
+                  <Tr>
+                    <Th color={primary} fontWeight="bold" borderBottom="2px solid" borderColor={primary}>First Name</Th>
+                    <Th color={primary} fontWeight="bold" borderBottom="2px solid" borderColor={primary}>Last Name</Th>
+                    <Th color={primary} fontWeight="bold" borderBottom="2px solid" borderColor={primary}>Phone Number</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {users.map((user, index) => (
+                    <Tr key={index}>
+                      <Td color={primary} fontWeight="semibold" borderBottom="1px solid" borderColor={grey}>{user.firstName}</Td>
+                      <Td color={primary} fontWeight="semibold" borderBottom="1px solid" borderColor={grey}>{user.lastName}</Td>
+                      <Td color={primary} fontWeight="semibold" borderBottom="1px solid" borderColor={grey}>{user.phoneNumber}</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
             </Box>
 
             <Text color={secondaryText}>Compose your message:</Text>
