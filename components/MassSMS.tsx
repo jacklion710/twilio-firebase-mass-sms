@@ -31,6 +31,20 @@ import {
 } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/utils/firebase';
+import { COLORS } from '@/utils/palette';
+
+const { 
+  secondaryText, 
+  background,
+  secondary, 
+  buttonCol, 
+  primary, 
+  accent,
+  neonAccent,
+  grey,
+  greenPrimary,
+  greenSecondary
+} = COLORS;
 
 const theme = extendTheme({
   fonts: {
@@ -125,7 +139,7 @@ function MassSMS() {
     <ChakraProvider theme={theme}>
       <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap" rel="stylesheet"></link>
 
-      <Center minH="100vh" bgColor="#FAF8F5">
+      <Center minH="100vh" bgColor={background}>
         <Container>
 
           <Heading mb={10} textAlign={'center'}>Mass SMS Builder</Heading>
@@ -137,26 +151,26 @@ function MassSMS() {
             rounded={'lg'}
             boxShadow={'lg'}
             p={9}
-            bg={'#A8BACB'}
+            bg={secondary}
             w={'32vw'}
             minW="50vw"
             alignSelf={'center'}
-            borderColor={'#2E4A6B'}
+            borderColor={primary}
             borderWidth="3px"
           >    
 
-            <Text color="white">List of users who are opted in for texts:</Text>
+            <Text color={secondaryText}>List of users who are opted in for texts:</Text>
 
             {/* LIST OF USERS WHO ARE OPTED INTO YOUR SMS LIST */}
-            <Box borderColor="black" bgColor="white" mb={8} mt={4} overflowY="scroll" maxH="400px" p={4} border="1px" borderRadius="md" minH="200px"> 
+            <Box borderColor={primary} bgColor="white" mb={8} mt={4} overflowY="scroll" maxH="400px" p={4} border="1px" borderRadius="md" minH="200px"> 
               <VStack align="stretch">
                 {users.map((user, index) => (
-                  <Text color='#2E4A6B' key={index}>{`${user.firstName} ${user.lastName} (${user.phoneNumber})`}</Text>
+                  <Text color={primary} key={index}>{`${user.firstName} ${user.lastName} (${user.phoneNumber})`}</Text>
                 ))}
               </VStack>
             </Box>
 
-            <Text color="white">Compose your message:</Text>
+            <Text color={secondaryText}>Compose your message:</Text>
 
             {/* MESSAGE TO SEND TO YOUR USERS */}
             <Textarea
@@ -173,28 +187,28 @@ function MassSMS() {
               rows={4} 
               required 
               bg="white" 
-              borderColor="black"
-              color='#2E4A6B'
-              _hover={{ borderColor: '#2E4A6B', borderWidth: "2px" }}
-              _focus={{ borderColor: '#FF8C42', borderWidth: '3px' }}
+              borderColor={primary}
+              color={primary}
+              _hover={{ borderColor: primary, borderWidth: "2px" }}
+              _focus={{ borderColor: accent, borderWidth: '3px' }}
             />
 
             {/* SUBMIT MESSAGE */}
             <Flex justifyContent="center" mt={4}> {/* Centered horizontally */}
               <Button  
                 onClick={handleSendClick}
-                color={'#FFFFFF'}
+                color={secondaryText}
                 _hover={{
-                  bg: `${'#FF8C42'}80`,
+                  bg: `${accent}80`,
                   transform: 'scale(1.05)'
                 }}
                 _active={{
-                  bg: `${'#FF8C42'}80`
+                  bg: `${neonAccent}80`
                 }}
                 boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
                 border="2px solid"
-                borderColor={'#8D8D8D'}
-                backgroundColor={`${'#7C9EB2'}80`}
+                borderColor={grey}
+                backgroundColor={`${buttonCol}80`}
                 transition="all 0.3s ease-in-out"
                 style={{ borderRadius: '20px' }}
                 mb={4}
@@ -221,8 +235,8 @@ function MassSMS() {
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
               <ModalContent 
-                bgColor={'#A8BACB'} 
-                borderColor={'#2E4A6B'} 
+                bgColor={secondary} 
+                borderColor={primary} 
                 borderWidth="3px" 
                 minW="40vw"
               >
@@ -235,9 +249,9 @@ function MassSMS() {
                   <Button 
                     mr={3} 
                     onClick={sendMessage}
-                    bgColor={`${'#6A8D7F'}80`}
-                    color="white" 
-                    _hover={{ bg: `${'#87A696'}80`, transform: 'scale(1.05)' }} 
+                    bgColor={`${greenPrimary}80`}
+                    color={secondaryText}
+                    _hover={{ bg: `${greenSecondary}80`, transform: 'scale(1.05)' }} 
                     _active={{ bg: "green.700" }} 
                     boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)" 
                     border="2px solid"
@@ -251,13 +265,13 @@ function MassSMS() {
                   <Button 
                     variant="ghost" 
                     onClick={onClose}
-                    bgColor={`${'#7C9EB2'}80`}
-                    color={'#FFFFFF'}
-                    _hover={{ bg: `${'#FF8C42'}80`, transform: 'scale(1.05)' }}
-                    _active={{ bg: `${'#FF5513'}80` }}
+                    bgColor={`${buttonCol}80`}
+                    color={secondaryText}
+                    _hover={{ bg: `${accent}80`, transform: 'scale(1.05)' }}
+                    _active={{ bg: `${neonAccent}80` }}
                     boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
                     border="2px solid"
-                    borderColor={'#8D8D8D'}
+                    borderColor={primary}
                     transition="all 0.3s ease-in-out"
                     borderRadius="20px"
                     fontFamily="'Kdam Thmor Pro', sans-serif"
