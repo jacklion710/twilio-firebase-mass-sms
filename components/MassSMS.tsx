@@ -168,7 +168,7 @@ function MassSMS() {
             <Text color={secondaryText}>List of users who are opted in for texts:</Text>
 
             {/* LIST OF USERS WHO ARE OPTED INTO YOUR SMS LIST */}
-            <Box borderColor={primary} bgColor="white" mb={8} mt={4} overflowY="auto" maxH="400px" p={4} border="2px" borderRadius="md">
+            <Box borderColor={primary} bgColor={background} mb={8} mt={4} overflowY="auto" maxH="400px" p={4} border="2px" borderRadius="md">
               <Table variant="simple" size="md" colorScheme="telegram">
                 <Thead>
                   <Tr>
