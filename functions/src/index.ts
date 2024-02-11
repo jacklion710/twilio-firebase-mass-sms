@@ -4,60 +4,61 @@ import * as admin from 'firebase-admin';
 // Initialize the Firebase Admin SDK
 admin.initializeApp();
 
-// // Function to add admin role
-// export const addAdminRole = functions.https.onCall(async (data, context) => {
-//     // Check if request is made by an authenticated user
-//     if (!context.auth) {
-//         throw new functions.https.HttpsError("unauthenticated", "Request must be made by an authenticated user.");
-//     }
-
-//     // Check if the requester has the admin attribute in their custom claims
-//     const requesterUid = context.auth.uid;
-//     const requester = await admin.auth().getUser(requesterUid);
-
-//     if (requester.customClaims && requester.customClaims.admin === true) {
-//         // Set custom user claim on the target user
-//         return admin.auth().getUserByEmail(data.email)
-//             .then(user => {
-//                 return admin.auth().setCustomUserClaims(user.uid, {
-//                     admin: true
-//                 });
-//             })
-//             .then(() => {
-//                 return {
-//                     message: `Success: ${data.email} has been made an admin.`
-//                 };
-//             })
-//             .catch(error => {
-//                 throw new functions.https.HttpsError("internal", error.message);
-//             });
-//     } else {
-//         throw new functions.https.HttpsError("permission-denied", "Request must be made by an admin user.");
-//     }
-// });
-
+// Function to allow any admin to grant an admin role
 export const addAdminRole = functions.https.onCall(async (data, context) => {
     // Check if request is made by an authenticated user
     if (!context.auth) {
         throw new functions.https.HttpsError("unauthenticated", "Request must be made by an authenticated user.");
     }
 
-    // Temporarily allow any authenticated user to grant admin role
-    return admin.auth().getUserByEmail(data.email)
-        .then(user => {
-            return admin.auth().setCustomUserClaims(user.uid, {
-                admin: true
+    // Check if the requester has the admin attribute in their custom claims
+    const requesterUid = context.auth.uid;
+    const requester = await admin.auth().getUser(requesterUid);
+
+    if (requester.customClaims && requester.customClaims.admin === true) {
+        // Set custom user claim on the target user
+        return admin.auth().getUserByEmail(data.email)
+            .then(user => {
+                return admin.auth().setCustomUserClaims(user.uid, {
+                    admin: true
+                });
+            })
+            .then(() => {
+                return {
+                    message: `Success: ${data.email} has been made an admin.`
+                };
+            })
+            .catch(error => {
+                throw new functions.https.HttpsError("internal", error.message);
             });
-        })
-        .then(() => {
-            return {
-                message: `Success: ${data.email} has been made an admin.`
-            };
-        })
-        .catch(error => {
-            throw new functions.https.HttpsError("internal", error.message);
-        });
+    } else {
+        throw new functions.https.HttpsError("permission-denied", "Request must be made by an admin user.");
+    }
 });
+
+// // Allow any authenticated user to grant admin privileges
+// export const addAdminRole = functions.https.onCall(async (data, context) => {
+//     // Check if request is made by an authenticated user
+//     if (!context.auth) {
+//         throw new functions.https.HttpsError("unauthenticated", "Request must be made by an authenticated user.");
+//     }
+
+//     // Temporarily allow any authenticated user to grant admin role
+//     return admin.auth().getUserByEmail(data.email)
+//         .then(user => {
+//             return admin.auth().setCustomUserClaims(user.uid, {
+//                 admin: true
+//             });
+//         })
+//         .then(() => {
+//             return {
+//                 message: `Success: ${data.email} has been made an admin.`
+//             };
+//         })
+//         .catch(error => {
+//             throw new functions.https.HttpsError("internal", error.message);
+//         });
+// });
 
 // Function to remove admin role
 export const removeAdminRole = functions.https.onCall(async (data, context) => {
