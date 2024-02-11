@@ -204,7 +204,7 @@ function MassSMS() {
               }}
               rows={4} 
               required 
-              bg="white" 
+              bg={background}
               borderColor={primary}
               color={primary}
               _hover={{ borderColor: primary, borderWidth: "2px" }}
