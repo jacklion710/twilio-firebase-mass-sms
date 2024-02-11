@@ -97,3 +97,29 @@ export const removeAdminRole = functions.https.onCall(async (data, context) => {
         throw new functions.https.HttpsError("permission-denied", "Request must be made by an admin user.");
     }
 });
+
+// Function to search user by username or email
+exports.findUserByEmailOrUsername = functions.https.onCall(async (data, context) => {
+    // Ensure the user is authenticated
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'You must be signed in to use this feature.');
+    }
+
+    const { loginIdentifier } = data; // This could be an email or username
+    let email = loginIdentifier;
+
+    // Check if the identifier is a username by searching in Firestore
+    if (!loginIdentifier.includes('@')) {
+        const usersRef = admin.firestore().collection('users');
+        const snapshot = await usersRef.where('username', '==', loginIdentifier).limit(1).get();
+        if (snapshot.empty) {
+            throw new functions.https.HttpsError('not-found', 'No matching user found.');
+        }
+        // Assuming username is unique and can only match one document
+        const userDoc = snapshot.docs[0];
+        email = userDoc.data().email; // Retrieve the email from the matched document
+    }
+
+    // Return the email address associated with the username
+    return { email };
+});
