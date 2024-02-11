@@ -99,12 +99,7 @@ export const removeAdminRole = functions.https.onCall(async (data, context) => {
 });
 
 // Function to search user by username or email
-exports.findUserByEmailOrUsername = functions.https.onCall(async (data, context) => {
-    // Ensure the user is authenticated
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'You must be signed in to use this feature.');
-    }
-
+exports.findUserByEmailOrUsername = functions.https.onCall(async (data) => {
     const { loginIdentifier } = data; // This could be an email or username
     let email = loginIdentifier;
 
@@ -115,9 +110,8 @@ exports.findUserByEmailOrUsername = functions.https.onCall(async (data, context)
         if (snapshot.empty) {
             throw new functions.https.HttpsError('not-found', 'No matching user found.');
         }
-        // Assuming username is unique and can only match one document
         const userDoc = snapshot.docs[0];
-        email = userDoc.data().email; // Retrieve the email from the matched document
+        email = userDoc.data().email; // Get the email associated with the username
     }
 
     // Return the email address associated with the username
