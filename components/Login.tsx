@@ -26,13 +26,6 @@ import {
 } from 'firebase/auth';
 import { 
     auth, 
-    db, 
-    getDocs, 
-    updateDoc, 
-    doc, 
-    collection, 
-    query, 
-    where 
 } from '@/utils/firebase';
 import dynamic from "next/dynamic";
 import { COLORS } from '@/utils/palette';
@@ -54,23 +47,6 @@ const {
       const [password, setPassword] = useState('');
       const [passwordError, setPasswordError] = useState('');
       const [error, setError] = useState<string | null>(null);
-      const [rememberMe, setRememberMe] = useState(false);
-      
-      const flexVariants = {
-        visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
-        hidden: { opacity: 0, scale: 0.8 }
-      };
-    
-      const stackVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-          opacity: 1,
-          transition: {
-            delay: 0.5,
-            duration: 0.5
-          }
-        }
-      };
   
       const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
@@ -78,75 +54,32 @@ const {
         }
       };
   
-      const handleSignInWithEmail = async (signInEmail: string, password: string) => {
+      const handleSignInWithEmail = async () => {
         try {
-          const userCredential = await signInWithEmailAndPassword(auth, signInEmail, password);
-          const user = userCredential.user;
-  
-          localStorage.setItem('rememberMe', rememberMe ? 'true' : 'false');
-      
-          // Update the user document in Firestore to ensure it matches the auth email
-          const userDocRef = doc(db, 'users', user.uid);
-          await updateDoc(userDocRef, {
-            email: signInEmail // Update the email field in Firestore
+          await signInWithEmailAndPassword(auth, email, password);
+          // Assuming successful sign-in redirects to the home page or user dashboard.
+          window.location.href = '/';
+        } catch (err) {
+          setError("There was an issue with logging in. Please check your credentials and try again.");
+          toast({
+            title: "Authentication Error",
+            description: "There was an issue with logging in. Please check your credentials and try again.",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
           });
-      
-          // Redirect to home page if email is verified
-          if (user.emailVerified) {
-            window.location.href = '/'; // Redirect to home page
-          } else {
-            setError("Please verify your email address before logging in.");
-          }
-        } catch (err) {
-          const friendlyErrorMessage = "There was an issue with logging in. Please check your credentials and try again.";
-          setError(friendlyErrorMessage);
         }
-      };
-  
-      const handleSignInWithUsername = async (username: string, password: string) => {
-        try {
-          // Query Firestore for the user document with the matching username
-          const usersRef = collection(db, 'users');
-          const q = query(usersRef, where('username', '==', username));
-          const querySnapshot = await getDocs(q);
-  
-          localStorage.setItem('rememberMe', rememberMe ? 'true' : 'false');
-      
-          if (querySnapshot.empty) {
-            throw new Error('Username does not exist');
-          }
-      
-          // Assuming usernames are unique, there should only be one match
-          const userDoc = querySnapshot.docs[0];
-          const signInEmail = userDoc.data().email;
-      
-          // Continue with the log-in process using the email
-          return handleSignInWithEmail(signInEmail, password);
-        } catch (err) {
-          setError("There was an issue with logging in with the username. Please check your credentials and try again.");
-        }
-      };    
+      }; 
     
       const handleSignIn = async () => {
         try {
-          // Determine if the input is a username or an email
-          const isUsername = !email.includes('@');
-          if (isUsername) {
-            await handleSignInWithUsername(email, password);
-          } else {
-            await handleSignInWithEmail(email, password);
-          }
+          await handleSignInWithEmail();
         } catch (err) {
           const friendlyErrorMessage = "There was an issue with logging in. Please check your credentials and try again.";
           setError(friendlyErrorMessage);
           console.error(err);
         }
       }; 
-          
-      // Handle Remember Me checkbox change
-      const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRememberMe(e.target.checked);
-      };
     
       useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -203,7 +136,7 @@ const {
                     <FormControl id="email" isRequired>
                       <FormLabel color={secondaryText} fontFamily="'Kdam Thmor Pro', sans-serif">Username or Email Address</FormLabel>
                       <Input
-                        placeholder="Enter your username or email"
+                        placeholder="Enter your email"
                         sx={{
                             '::placeholder': {
                             color: 'gray.400', 
@@ -296,4 +229,8 @@ const {
     }
     
     export default dynamic(() => Promise.resolve(Login), { ssr: false });
+
+function toast(arg0: { title: string; description: string; status: string; duration: number; isClosable: boolean; }) {
+  throw new Error('Function not implemented.');
+}
     
