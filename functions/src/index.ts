@@ -117,3 +117,43 @@ exports.findUserByEmailOrUsername = functions.https.onCall(async (data) => {
     // Return the email address associated with the username
     return { email };
 });
+
+// Function to check if a username already exists
+exports.checkUsernameExists = functions.https.onCall(async (data, context) => {
+    const { username } = data;
+
+    if (!username) {
+        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a username argument.');
+    }
+
+    try {
+        const usersRef = admin.firestore().collection('users');
+        const snapshot = await usersRef.where('username', '==', username).limit(1).get();
+        if (!snapshot.empty) {
+            return { exists: true };
+        }
+        return { exists: false };
+    } catch (error) {
+        throw new functions.https.HttpsError('internal', 'Something went wrong when checking the username.');
+    }
+});
+
+// Function to check if a phone number already exists
+exports.checkPhoneNumberExists = functions.https.onCall(async (data, context) => {
+    const { phoneNumber } = data;
+
+    if (!phoneNumber) {
+        throw new functions.https.HttpsError('invalid-argument', 'The function must be called with a phone number argument.');
+    }
+
+    try {
+        const usersRef = admin.firestore().collection('users');
+        const snapshot = await usersRef.where('phoneNumber', '==', phoneNumber).limit(1).get();
+        if (!snapshot.empty) {
+            return { exists: true };
+        }
+        return { exists: false };
+    } catch (error) {
+        throw new functions.https.HttpsError('internal', 'Something went wrong when checking the phone number.');
+    }
+});
